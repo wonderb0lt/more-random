@@ -6,6 +6,9 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+/**
+ * A wrapper around {@link java.util.Random} that adds some convenience methods.
+ */
 public class MoreRandom extends Random {
     private Random delegate;
 
@@ -21,6 +24,11 @@ public class MoreRandom extends Random {
         this.delegate = delegate;
     }
 
+    /**
+     * Selects a single value out of the given collection.
+     * <p>
+     * This can be regarded as a special case of {@link #sample(Collection, int)} with sample size <code>1</code>.
+     */
     public <T> Optional<T> choice(Collection<T> population) {
         if (population.isEmpty()) {
             return Optional.empty();
@@ -30,6 +38,11 @@ public class MoreRandom extends Random {
         }
     }
 
+    /**
+     * Chooses a specified number of items from the given collection.
+     *
+     * @throws IllegalArgumentException when the sample size exceeds the size of the population.
+     */
     public <T> Collection<T> sample(Collection<T> population, int sampleSize) {
         if (sampleSize > population.size()) {
             throw new IllegalArgumentException("Sample size needs to be smaller than population size");
@@ -45,7 +58,15 @@ public class MoreRandom extends Random {
                 .limit(sampleSize)
                 .mapToObj(populationAsList::get)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
 
+    /**
+     * Produces a random int within the given lower and upper bound
+     */
+    public int randint(int lowerBound, int upperBound) {
+        return delegate.ints(lowerBound, upperBound)
+                .findFirst()
+                .getAsInt();
     }
 
     // Delegated methods
