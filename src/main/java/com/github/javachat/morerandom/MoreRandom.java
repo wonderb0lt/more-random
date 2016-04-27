@@ -69,12 +69,6 @@ public class MoreRandom extends Random {
                 .getAsInt();
     }
 
-    // Delegated methods
-    @Override
-    public synchronized void setSeed(long seed) {
-        delegate.setSeed(seed);
-    }
-
     @Override
     public void nextBytes(byte[] bytes) {
         delegate.nextBytes(bytes);
